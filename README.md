@@ -42,3 +42,44 @@ BuildContext adalah yang memberi tahu lokasi sebuah widget di dalam Widget Tree.
 
 - Jelaskan konsep "hot reload" di Flutter dan bagaimana bedanya dengan "hot restart".
 hot reload itu langsung menyisipkan kode2 baru diubah ke virtual machine yang sedang run, hot reload sangat cepat dan biasanya dipakai untuk melihat hasil dari perubahan UI, hot reload juga menyimpan state dari aplikasi. kalau hot restart itu mematikan vm yang sedang run dan mulai ulang seluruh aplikasi dari awal, hot restart lebih lambat dari hot reload, biasanya digunakan jika ada perubahan data atau logika dalam kodenya, hot restart tidak menyimpan state aplikasinya 
+
+
+====================================================================================================================
+
+===== TUGAS 8 =====
+
+- Jelaskan perbedaan antara Navigator.push() dan Navigator.pushReplacement() pada Flutter. Dalam kasus apa sebaiknya masing-masing digunakan pada aplikasi Football Shop kamu?
+kalau Navigator.push() menambahkan halaman baru ke stack halaman dan halaman2 sebelumnya masih ada dibawahnya, user bisa return ke halaman sebelumnya. kalau Navigator.pushReplacement() halaman sekarang diganti ke halaman baru dan halaman yang sekarang langsung dibuang dari memori, user tidak bisa return ke halaman sebelumnya. 
+dalam kasus ingin membuka detail produk sebaiknya menggunakan Navigator.push() dan dalam kasus pindah halaman setelah login berhasil sebaiknya pakai Navigator.pushReplacement() agar user tidak bisa return ke halaman login
+
+- Bagaimana kamu memanfaatkan hierarchy widget seperti Scaffold, AppBar, dan Drawer untuk membangun struktur halaman yang konsisten di seluruh aplikasi?
+Scaffold: sebagai kerangka dasar untuk setiap halaman, menyediakan slot untuk appBar, body, dan Drawer
+AppBar: berada di slot appBar pada Scaffold, memastikan setiap halaman memiliki judul yang sama di bagian atas
+Drawer: berada di slot Drawer pada Scaffold, Scaffold yg menangani logika membuka dan menutup drawer
+
+- Dalam konteks desain antarmuka, apa kelebihan menggunakan layout widget seperti Padding, SingleChildScrollView, dan ListView saat menampilkan elemen-elemen form? Berikan contoh penggunaannya dari aplikasi kamu.
+Padding:
+    Kelebihan: Memberi ruang di sekitar TextFormField. Tanpa Padding, field menempel satu sama lain
+
+    Contoh: "Padding(padding: EdgeInsets.all(10))," >>> memberi jarak 10 piksel di sekeliling setiap field.
+
+SingleChildScrollView:
+    Kelebihan: membungkus Column yang lebih panjang dari layar dan memungkinkan seluruh form di-scroll secara vertikal 
+
+    Contoh: "child: SingleChildScrollView( child: Column(..." >>> membungkus seluruh Column yang berisi Padding dan TextFormField
+
+ListView:
+    Kelebihan: untuk daftar yang sangat panjang atau dinamis, ia hanya render item yang terlihat di layar
+
+    Contoh: "child: ListView(
+        children: ["
+
+- Bagaimana kamu menyesuaikan warna tema agar aplikasi Football Shop memiliki identitas visual yang konsisten dengan brand toko?
+Cara terbaik untuk memastikan konsistensi brand adalah mendefinisikan tema di dalam MaterialApp (di main.dart) >>> "return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
+        .copyWith(secondary: Colors.blueAccent[400]),
+      ),
+      home: MyHomePage(),
+    );"
