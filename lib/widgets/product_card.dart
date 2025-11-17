@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:futbolshop/screens/product_form.dart';
+import 'package:futbolshop/screens/product_entry_list.dart';
+import 'package:futbolshop/screens/my_product_entry_list.dart';
 
 class ItemHomepage {
  final String name;
@@ -27,7 +29,7 @@ class ItemCard extends StatelessWidget {
       child: InkWell(
         // Aksi ketika kartu ditekan.
         // Area responsif terhadap sentuhan
-        onTap: () {
+        onTap: () async {
           // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -41,8 +43,21 @@ class ItemCard extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ProductFormPage(),
                   ));
+          } else if (item.name == "All Products") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ProductEntryListPage()
+                ),
+            );
+          } else if (item.name == "My Products") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MyProductEntryListPage()
+                ),
+            );
           }
-
         },
         // Container untuk menyimpan Icon dan Text
         child: Container(

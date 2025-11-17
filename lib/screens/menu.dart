@@ -13,7 +13,7 @@ class MyHomePage extends StatelessWidget {
   // https://api.flutter.dev/flutter/material/Icons-class.html
   final List<ItemHomepage> items = [
     ItemHomepage("All Products", Icons.shopping_bag, Colors.blue),
-    ItemHomepage("My Products", Icons.shopping_bag, Colors.green),
+    ItemHomepage("My Products", Icons.inventory_2, Colors.green),
     ItemHomepage("Create Product", Icons.add,Colors.red),
   ];
   

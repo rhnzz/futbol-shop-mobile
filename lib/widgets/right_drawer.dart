@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:futbolshop/screens/menu.dart';
 import 'package:futbolshop/screens/product_form.dart';
-
+import 'package:futbolshop/screens/product_entry_list.dart';
+import 'package:futbolshop/screens/my_product_entry_list.dart';
+import 'package:futbolshop/screens/login.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 class RightDrawer extends StatelessWidget {
   const RightDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Drawer(
       child: ListView(
         children: [
@@ -59,6 +64,58 @@ class RightDrawer extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ProductFormPage(),
                   ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_bag_outlined),
+            title: const Text('All Products'),
+            onTap: () {
+                // Route to product list page
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProductEntryListPage()),
+                );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.inventory_2_outlined),
+            title: const Text('My Products'),
+            onTap: () {
+                // Route to product list page
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyProductEntryListPage()),
+                );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app_outlined),
+            title: const Text('Logout'),
+            onTap: () async { 
+              final response = await request.logout("http://localhost:8000/auth/logout/");
+              String message = response["message"];
+              if (context.mounted) {
+                if (response['status']) {
+                  String uname = response["username"];
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$message See you again, $uname."),
+                  ));
+                  
+                  // --- [PERBAIKAN 3] ---
+                  // Gunakan pushAndRemoveUntil untuk menghapus semua halaman sebelumnya
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (Route<dynamic> route) => false, // Hapus semua route
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
+                }
+              }
             },
           ),
         ],

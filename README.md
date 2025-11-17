@@ -83,3 +83,38 @@ Cara terbaik untuk memastikan konsistensi brand adalah mendefinisikan tema di da
       ),
       home: MyHomePage(),
     );"
+
+====================================================================================================================
+
+===== TUGAS 9 =====
+
+- Jelaskan mengapa kita perlu membuat model Dart saat mengambil/mengirim data JSON? Apa konsekuensinya jika langsung memetakan Map<String, dynamic> tanpa model (terkait validasi tipe, null-safety, maintainability)?
+Memerlukan membuat model dart karena untuk memastikan data JSON yang diambil memiliki tipe yang sesuai dan tidak null (type safety dan null safety). Konsekuensinya jika langsung memetakan adalah kode jadi lebih mungkin terjadi runtime error, karena diperlukannya validasi tipe dan null. maintainability menjadi lebih susah.
+
+- Apa fungsi package http dan CookieRequest dalam tugas ini? Jelaskan perbedaan peran http vs CookieRequest.
+http berfungsi untuk mengirim dan menerima response HTTP, GET POST. CookieRequest berfungsi untuk menyimpan session cookie (sessionid dan CSRF token). perbedaan keduanya, kalau http menangani transfer data, sedangkan cookieRequest menangani autentikasi.
+
+- Jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
+diperlukan karena cookieRequest menyimpan state autentikasi, jadi semua request HTTP akan menggunakan cookie yang sama untuk memastikan user masih terautentikasi  
+
+- Jelaskan konfigurasi konektivitas yang diperlukan agar Flutter dapat berkomunikasi dengan Django. Mengapa kita perlu menambahkan 10.0.2.2 pada ALLOWED_HOSTS, mengaktifkan CORS dan pengaturan SameSite/cookie, dan menambahkan izin akses internet di Android? Apa yang akan terjadi jika konfigurasi tersebut tidak dilakukan dengan benar?
+10.0.2.2 perlu ditambahkan karena itu adalah IP yang digunakan untuk merujuk ke tempat django berjalan. jika tidak ditambahkan, django akan HTTP 400 bad request. mengaktifkan CORS dibutuhkan agar django mengizinkan request dari flutter, jika tidak permintaan bisa diproses. menambahkan izin akses internet di android karena agar aplikasi tidak diblokir dari akses internet.
+
+- Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter.
+user input data (flutter) -> data diubah menjadi model dart -> model diubah manjadi JSON -> mengirim HTTP POST ke django (JSON dan cookie) -> django memproses JSON dan memvalidasi cookie dan menyimpan data ke database -> django meresponse 200 ok -> flutter menerima response -> JSON diubah kembali menjadi model dart  
+
+- Jelaskan mekanisme autentikasi dari login, register, hingga logout. Mulai dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+register: flutter mengirim username, password (POST) dalam bentuk JSON ke register django. django membuat user dan menyimpan ke database dan memberi respon 200
+login: flutter mengirim useername dan password (POST) dalam JSON ke endpoint register django. django memverifikasi dan jika berhasil akan memanggil django.contrib.auth.login() dan membuat session di database dan mengatur session id cookie
+logout: POSt ke endpoint logout django. django memanggil django.contrib.auth.logout() untuk menghapus seesion dari database  
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).
+(django) menambahkan app authenticaton lalu menginstall django-cors-headers lalu menyesuaikan settings.py (menambahkan authentication di installed apps, menambahkan 10.0.2.2 di allowed host, menambahkan corsheaders ke installed apps, dan yang lainnya)
+(flutter) menambahkan depedensi dan menambahkan izin akses internt di android manifest
+(django) membuat fungsi login logout register di authentication/views.py dan menambahkan pathn di untuk login logout register di authentication/urls.py
+(flutter) menambahkan Provider<CookieRequest> untuk membagikan CookieRequest ke semua komponen agar dapat diakses ke seluruh aplikasi. lalu membuat halaman  untuk login dan register (login.dart dan register.dart)
+(quick type) mengambil response JSON untuk di copy paste ke  quick type dan mengahasilkan model dart
+(django) menambahkan endpoint proxy image dan create product flutter di main/views.py. lalu menambahkan path keduanya ke main/urls.py
+(flutter) membuat halaman yang memuat dan menampilkan seluruh produk dan produk yang berintegrasi dengan user yang sedang login saja (produk yang dijual user yang sedang login) 
+(django) menambahkan endpoint my product json dan menambahkan path nya (di main/vies.py dan main/urls.py)
+(flutter) membuat product detail dart untuk menampilkan detail product. dan update widget-widget di main menu dan drawer
